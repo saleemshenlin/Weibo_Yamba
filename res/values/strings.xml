@@ -2,11 +2,22 @@
 <resources>
 
     <string name="app_name">Yamba_微博</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">设置</string>
     <string name="hello_world">Hello world!</string>
     <string name="titleStatus">有什么新鲜事要告诉大家</string>
     <string name="hintText">发言请遵守社区公约，还剩下140个字！</string>
     <string name="buttonUpdate">发送</string>
     <string name="sendMessage">发送微博</string>
+    <string name="zero">000</string>
+    <string name="textCount">140</string>
+    <string name="titleUsermane">用户名</string>
+    <string name="titlePassword">密码</string>
+    <string name="titleApiRoot">API路径</string>
+    <string name="summaryUsername">用户名详细</string>
+    <string name="summaryPassword">密码详细</string>
+    <string name="summaryApiRoot">API路径详细</string>
+    <string name="titlePrefs">首选项设置</string>
+    <string name="titleAbout">关于Yamba_微博</string>
+    
 
 </resources>
