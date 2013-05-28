@@ -14,9 +14,6 @@ import com.weibo.sdk.android.sso.SsoHandler;
 import com.weibo.sdk.android.util.Utility;
 
 public class SSO_Main extends Activity {
-	private Weibo mWeibo;
-	private static final String CONSUMER_KEY = "1663244227";// 替换为开发者的appkey，例如"1646212860";
-	private static final String REDIRECT_URL = "http://weibo.com/saleemshenlin";
 	public static Oauth2AccessToken accessToken;
 	public static final String TAG = "sinasdk";
 	/**
@@ -27,8 +24,8 @@ public class SSO_Main extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mWeibo = Weibo.getInstance(CONSUMER_KEY, REDIRECT_URL);
 		SSO_Main.accessToken = AccessTokenKeeper.readAccessToken(this);
+		YambaApplication yambaApplication = ((YambaApplication) getApplication());
 		if (SSO_Main.accessToken.isSessionValid()) {
 			Weibo.isWifi = Utility.isWifi(this);
 			Toast.makeText(SSO_Main.this, "认证成功", Toast.LENGTH_SHORT).show();
@@ -36,7 +33,8 @@ public class SSO_Main extends Activity {
 			startActivity(intent);
 		} else {
 			Toast.makeText(SSO_Main.this, "开始认证", Toast.LENGTH_SHORT).show();
-			mSsoHandler = new SsoHandler(SSO_Main.this, mWeibo);
+			mSsoHandler = new SsoHandler(SSO_Main.this,
+					yambaApplication.getWeibo());
 			mSsoHandler.authorize(new AuthDialogListener());
 			Intent intent = new Intent(SSO_Main.this, StatusActivity.class);
 			startActivity(intent);

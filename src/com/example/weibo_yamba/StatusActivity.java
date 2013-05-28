@@ -4,9 +4,13 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.test.TouchUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,15 +24,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.api.StatusesAPI;
 import com.weibo.sdk.android.net.RequestListener;
 
 public class StatusActivity extends Activity implements OnClickListener,
-		TextWatcher {
+		TextWatcher, OnSharedPreferenceChangeListener {
 	private static final String TAG = "StatusActivity";
+
+	SharedPreferences prefs;
 	// private Handler handler = null;
-	StatusesAPI api = new StatusesAPI(SSO_Main.accessToken);
+
 	EditText editText;
 	Button updateButton;
 	String lat = "31.5";
@@ -50,12 +57,19 @@ public class StatusActivity extends Activity implements OnClickListener,
 		textCount.setText("还可以输入" + Integer.toString(140) + "字");
 		textCount.setTextColor(Color.WHITE);
 		editText.addTextChangedListener(this);
+		// 设置 prefs
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs.registerOnSharedPreferenceChangeListener(this);
+
 	}
 
 	// Asynchronously posts to Weibo
 	class PostToWeibo extends AsyncTask<String, Integer, String> {
 		@Override
 		protected String doInBackground(String... statuses) {
+			YambaApplication yamApplication = (YambaApplication) getApplication();
+			StatusesAPI api = null;
+			api = yamApplication.getStatusesAPI();
 			api.update(statuses[0], lat, lon, new RequestListener() {
 
 				@Override
@@ -170,6 +184,7 @@ public class StatusActivity extends Activity implements OnClickListener,
 					.show();
 		}
 	};
+	private Oauth2AccessToken token;
 
 	// Menu
 	@Override
@@ -187,11 +202,22 @@ public class StatusActivity extends Activity implements OnClickListener,
 		case R.id.action_settings:
 			startActivity(new Intent(this, PrefsActivity.class));
 			break;
+		case R.id.itemSerivceStart:
+			startService(new Intent(this, UpdaterService.class));
+		case R.id.itemSerivceStop:
+			stopService(new Intent(this, UpdaterService.class));
 
 		default:
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

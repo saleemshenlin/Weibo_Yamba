@@ -29,6 +29,8 @@ public final class R {
         public static final int action_settings=0x7f090003;
         public static final int buttonUpdate=0x7f090002;
         public static final int editText=0x7f090001;
+        public static final int itemSerivceStart=0x7f090005;
+        public static final int itemSerivceStop=0x7f090006;
         public static final int textCount=0x7f090000;
     }
     public static final class layout {
@@ -52,7 +54,9 @@ public final class R {
         public static final int titleApiRoot=0x7f06000b;
         public static final int titlePassword=0x7f06000a;
         public static final int titlePrefs=0x7f06000f;
+        public static final int titleStartService=0x7f060011;
         public static final int titleStatus=0x7f060003;
+        public static final int titleStopService=0x7f060012;
         public static final int titleUsermane=0x7f060009;
         public static final int zero=0x7f060007;
     }

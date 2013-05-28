@@ -18,6 +18,7 @@
     <string name="summaryApiRoot">API路径详细</string>
     <string name="titlePrefs">首选项设置</string>
     <string name="titleAbout">关于Yamba_微博</string>
-    
+    <string name="titleStartService">开启服务</string>
+    <string name="titleStopService">关闭服务</string>
 
 </resources>

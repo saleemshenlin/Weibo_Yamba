@@ -14,7 +14,7 @@ public class AccessTokenKeeper {
 	private static final String PREFERENCES_NAME = "com_weibo_sdk_android";
 	/**
 	 * 保存accesstoken到SharedPreferences
-	 * @param context Activity 上下文环�?
+	 * @param context Activity 上下文环�?
 	 * @param token Oauth2AccessToken
 	 */
 	public static void keepAccessToken(Context context, Oauth2AccessToken token) {

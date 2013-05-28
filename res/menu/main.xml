@@ -9,5 +9,13 @@
         android:id="@+id/about"
         android:title="@string/titleAbout">
     </item>
+    <item
+        android:id="@+id/itemSerivceStart"
+        android:title="@string/titleStartService">
+    </item>
+    <item
+        android:id="@+id/itemSerivceStop"
+        android:title="@string/titleStopService">
+    </item>
 
 </menu>
