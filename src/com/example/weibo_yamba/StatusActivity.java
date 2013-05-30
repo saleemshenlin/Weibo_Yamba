@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.test.TouchUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,7 +23,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.api.StatusesAPI;
 import com.weibo.sdk.android.net.RequestListener;
@@ -75,13 +73,13 @@ public class StatusActivity extends Activity implements OnClickListener,
 				@Override
 				public void onIOException(IOException arg0) {
 					// TODO Auto-generated method stub
-					editText.setText(arg0.toString());
+					// editText.setText(arg0.toString());
 				}
 
 				@Override
 				public void onError(WeiboException arg0) {
 					// TODO Auto-generated method stub
-					editText.setText(arg0.toString());
+					// editText.setText(arg0.toString());
 				}
 
 				@Override
@@ -184,7 +182,6 @@ public class StatusActivity extends Activity implements OnClickListener,
 					.show();
 		}
 	};
-	private Oauth2AccessToken token;
 
 	// Menu
 	@Override
