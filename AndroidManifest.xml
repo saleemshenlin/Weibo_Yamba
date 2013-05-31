@@ -34,6 +34,8 @@
             android:name="com.example.weibo_yamba.PrefsActivity"
             android:label="@string/titlePrefs" >
         </activity>
+        <activity android:name="com.example.weibo_yamba.TimelineActivity" >
+        </activity>
 
         <service android:name="com.example.weibo_yamba.UpdaterService" >
         </service>

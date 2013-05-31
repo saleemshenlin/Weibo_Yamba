@@ -20,5 +20,7 @@
     <string name="titleAbout">关于Yamba_微博</string>
     <string name="titleStartService">开启服务</string>
     <string name="titleStopService">关闭服务</string>
+    <string name="titleTimeline">时间轴</string>
+    <string name="titlePurge">清洗</string>
 
 </resources>

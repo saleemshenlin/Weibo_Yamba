@@ -1,6 +1,9 @@
 package com.example.weibo_yamba;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,8 +31,7 @@ public class YambaApplication extends Application implements
 	private boolean serviceRunning;
 	private StatusData statusData;
 	public int statesCount = 0;
-	// private SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-	// "yyyy-MM-dd HH:mm:ss");
+
 	Weibo mWeibo;
 
 	@Override
@@ -76,7 +78,8 @@ public class YambaApplication extends Application implements
 	}
 
 	public StatusData getStatusData() {
-		return statusData;
+		StatusData tStatusData = new StatusData(this);
+		return tStatusData;
 	}
 
 	public synchronized void fetchStatusUpdates() {
@@ -204,4 +207,5 @@ public class YambaApplication extends Application implements
 			}
 		}
 	}
+
 }

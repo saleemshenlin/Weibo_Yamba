@@ -29,14 +29,14 @@ public class SSO_Main extends Activity {
 		if (SSO_Main.accessToken.isSessionValid()) {
 			Weibo.isWifi = Utility.isWifi(this);
 			Toast.makeText(SSO_Main.this, "认证成功", Toast.LENGTH_SHORT).show();
-			Intent intent = new Intent(SSO_Main.this, StatusActivity.class);
+			Intent intent = new Intent(SSO_Main.this, TimelineActivity.class);
 			startActivity(intent);
 		} else {
 			Toast.makeText(SSO_Main.this, "开始认证", Toast.LENGTH_SHORT).show();
 			mSsoHandler = new SsoHandler(SSO_Main.this,
 					yambaApplication.getWeibo());
 			mSsoHandler.authorize(new AuthDialogListener());
-			Intent intent = new Intent(SSO_Main.this, StatusActivity.class);
+			Intent intent = new Intent(SSO_Main.this, TimelineActivity.class);
 			startActivity(intent);
 		}
 	}

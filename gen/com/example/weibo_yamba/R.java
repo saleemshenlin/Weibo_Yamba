@@ -25,16 +25,23 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int about=0x7f090004;
-        public static final int action_settings=0x7f090003;
-        public static final int buttonUpdate=0x7f090002;
-        public static final int editText=0x7f090001;
-        public static final int itemSerivceStart=0x7f090005;
-        public static final int itemSerivceStop=0x7f090006;
-        public static final int textCount=0x7f090000;
+        public static final int buttonUpdate=0x7f090005;
+        public static final int editText=0x7f090004;
+        public static final int itemPrefs=0x7f090009;
+        public static final int itemPurge=0x7f09000a;
+        public static final int itemStatus=0x7f090007;
+        public static final int itemTimeline=0x7f090008;
+        public static final int itemToggleService=0x7f09000b;
+        public static final int listTimeline=0x7f090006;
+        public static final int textCount=0x7f090003;
+        public static final int textCreatedAt=0x7f090001;
+        public static final int textText=0x7f090002;
+        public static final int textUser=0x7f090000;
     }
     public static final class layout {
-        public static final int status=0x7f030000;
+        public static final int row=0x7f030000;
+        public static final int status=0x7f030001;
+        public static final int timeline=0x7f030002;
     }
     public static final class menu {
         public static final int main=0x7f080000;
@@ -54,9 +61,11 @@ public final class R {
         public static final int titleApiRoot=0x7f06000b;
         public static final int titlePassword=0x7f06000a;
         public static final int titlePrefs=0x7f06000f;
+        public static final int titlePurge=0x7f060014;
         public static final int titleStartService=0x7f060011;
         public static final int titleStatus=0x7f060003;
         public static final int titleStopService=0x7f060012;
+        public static final int titleTimeline=0x7f060013;
         public static final int titleUsermane=0x7f060009;
         public static final int zero=0x7f060007;
     }

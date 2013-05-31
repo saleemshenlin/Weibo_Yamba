@@ -1,21 +1,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
-    <item
-        android:id="@+id/about"
-        android:title="@string/titleAbout">
+        android:id="@+id/itemStatus"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/titleStatus">
     </item>
     <item
-        android:id="@+id/itemSerivceStart"
+        android:id="@+id/itemTimeline"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/titleTimeline">
+    </item>
+    <item
+        android:id="@+id/itemPrefs"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/titlePrefs">
+    </item>
+    <item
+        android:id="@+id/itemPurge"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/titlePurge">
+    </item>
+    <item
+        android:id="@+id/itemToggleService"
         android:title="@string/titleStartService">
-    </item>
-    <item
-        android:id="@+id/itemSerivceStop"
-        android:title="@string/titleStopService">
     </item>
 
 </menu>

@@ -2,8 +2,6 @@ package com.example.weibo_yamba;
 
 import java.io.IOException;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
@@ -13,9 +11,6 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,7 +22,7 @@ import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.api.StatusesAPI;
 import com.weibo.sdk.android.net.RequestListener;
 
-public class StatusActivity extends Activity implements OnClickListener,
+public class StatusActivity extends BaseActivity implements OnClickListener,
 		TextWatcher, OnSharedPreferenceChangeListener {
 	private static final String TAG = "StatusActivity";
 
@@ -65,9 +60,8 @@ public class StatusActivity extends Activity implements OnClickListener,
 	class PostToWeibo extends AsyncTask<String, Integer, String> {
 		@Override
 		protected String doInBackground(String... statuses) {
-			YambaApplication yamApplication = (YambaApplication) getApplication();
 			StatusesAPI api = null;
-			api = yamApplication.getStatusesAPI();
+			api = yambaApplication.getStatusesAPI();
 			api.update(statuses[0], lat, lon, new RequestListener() {
 
 				@Override
@@ -182,33 +176,6 @@ public class StatusActivity extends Activity implements OnClickListener,
 					.show();
 		}
 	};
-
-	// Menu
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		switch (item.getItemId()) {
-		case R.id.action_settings:
-			startActivity(new Intent(this, PrefsActivity.class));
-			break;
-		case R.id.itemSerivceStart:
-			startService(new Intent(this, UpdaterService.class));
-		case R.id.itemSerivceStop:
-			stopService(new Intent(this, UpdaterService.class));
-
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
