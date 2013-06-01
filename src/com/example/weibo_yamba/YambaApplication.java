@@ -1,9 +1,6 @@
 package com.example.weibo_yamba;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +26,6 @@ public class YambaApplication extends Application implements
 	private static String CONSUMER_KEY = "1663244227";// 替换为开发者的appkey，例如"1646212860";
 	private static String REDIRECT_URL = "http://weibo.com/saleemshenlin";
 	private boolean serviceRunning;
-	private StatusData statusData;
 	public int statesCount = 0;
 
 	Weibo mWeibo;

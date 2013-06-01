@@ -3,7 +3,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:overScrollMode="ifContentScrolls"
+    android:padding="5dp" >
 
     <!--  -->
 
@@ -19,7 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Slashdot"
+            android:textSize="16sp"
             android:textStyle="bold" />
+
         <!--  -->
 
         <TextView
@@ -28,7 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:text="10 minutes ago" />
+            android:text="10 minutes ago"
+            android:textSize="10sp" />
+
     </LinearLayout>
     <!--  -->
 
@@ -36,6 +42,8 @@
         android:id="@+id/textText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Firefox comes to Android" />
+        android:padding="5dp"
+        android:text="Firefox comes to Android"
+        android:textSize="12sp" />
 
 </LinearLayout>
