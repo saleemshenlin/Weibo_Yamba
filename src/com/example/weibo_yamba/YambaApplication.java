@@ -64,8 +64,12 @@ public class YambaApplication extends Application implements
 		return serviceRunning;
 	}
 
-	public void setServiceRunning(boolean serviceRunning) {
-		this.serviceRunning = serviceRunning;
+	public void setServiceRunning() {
+		if (this.serviceRunning) {
+			this.serviceRunning = false;
+		} else {
+			this.serviceRunning = true;
+		}
 	}
 
 	public StatusesAPI getStatusesAPI() {

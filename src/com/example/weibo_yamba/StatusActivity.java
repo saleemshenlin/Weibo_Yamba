@@ -66,19 +66,16 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
 
 				@Override
 				public void onIOException(IOException arg0) {
-					// TODO Auto-generated method stub
 					// editText.setText(arg0.toString());
 				}
 
 				@Override
 				public void onError(WeiboException arg0) {
-					// TODO Auto-generated method stub
 					// editText.setText(arg0.toString());
 				}
 
 				@Override
 				public void onComplete(String arg0) {
-					// TODO Auto-generated method stub
 				}
 			});
 			return statuses[0];
@@ -97,6 +94,7 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
 			editText.setHint("发言请遵守社区公约，还剩下140个字！");
 			Toast.makeText(StatusActivity.this, "发送成功！Yeah！", Toast.LENGTH_LONG)
 					.show();
+
 		}
 	}
 

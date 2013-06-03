@@ -40,8 +40,10 @@ public class BaseActivity extends Activity {
 		case R.id.itemToggleService:
 			if (yambaApplication.isServiceRunning()) {
 				stopService(new Intent(this, UpdaterService.class));
+				yambaApplication.setServiceRunning();
 			} else {
 				startService(new Intent(this, UpdaterService.class));
+				yambaApplication.setServiceRunning();
 			}
 			break;
 		case R.id.itemTimeline:
@@ -64,9 +66,9 @@ public class BaseActivity extends Activity {
 	public boolean onMenuOpened(int featureId, Menu menu) { //
 		MenuItem toggleItem = menu.findItem(R.id.itemToggleService); //
 		if (yambaApplication.isServiceRunning()) { //
-			toggleItem.setTitle(R.string.titleStartService);
-		} else { //
 			toggleItem.setTitle(R.string.titleStopService);
+		} else { //
+			toggleItem.setTitle(R.string.titleStartService);
 		}
 		return true;
 	}
