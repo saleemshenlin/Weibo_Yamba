@@ -58,14 +58,16 @@ public class TimelineActivity extends BaseActivity {
 			if (view.getId() != R.id.textCreatedAt)
 				return false;
 			long timestamp = 0;
+			long now = System.currentTimeMillis();
 			try {
 				timestamp = str2Date2long(cursor.getString(columnIndex));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			CharSequence reltime = DateUtils
-					.getRelativeTimeSpanString(timestamp);
+			CharSequence reltime = DateUtils.getRelativeTimeSpanString(
+					timestamp, now, DateUtils.SECOND_IN_MILLIS,
+					DateUtils.FORMAT_ABBREV_ALL);
 			((TextView) view).setText(reltime);
 			return true;
 		}
