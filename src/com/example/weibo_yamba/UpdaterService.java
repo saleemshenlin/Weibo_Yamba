@@ -33,7 +33,7 @@ public class UpdaterService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		this.updater = new Updater();
-		yambaApplication = (YambaApplication)getApplication();
+		yambaApplication = (YambaApplication) getApplication();
 		Log.e(TAG, "onCreate");
 	}
 
@@ -68,6 +68,7 @@ public class UpdaterService extends Service {
 
 		Intent intent;
 		UpdaterService updaterService = UpdaterService.this;
+
 		public Updater() {
 			super("UpdaterService-Updater");
 		}
@@ -79,7 +80,9 @@ public class UpdaterService extends Service {
 			while (updaterService.runFlag) {
 				Log.d(TAG, "Updater running");
 				try {
-					StatusesAPI api = yambaApplication.getStatusesAPI();
+					StatusesAPI api = yambaApplication
+							.getStatusesAPI(updaterService
+									.getApplicationContext());
 					api.friendsTimeline((long) 0, (long) 0, 20, 1, false,
 							FEATURE.ALL, false, new RequestListener() {
 
@@ -130,7 +133,7 @@ public class UpdaterService extends Service {
 													userItem.getString("name"));
 											values.put(
 													StatusData.C_USER_IMG,
-													userItem.getString("profile_image_url"));
+													userItem.getString("avatar_large"));
 											values.put(StatusData.C_TEXT,
 													statusesItem
 															.getString("text"));

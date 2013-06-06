@@ -1,10 +1,5 @@
 package com.example.weibo_yamba;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.ParseException;
 
 import android.app.PendingIntent;
@@ -14,9 +9,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -96,61 +88,4 @@ public class YambaWidget extends AppWidgetProvider {
 		}
 	}
 
-	// Makes HttpURLConnection and returns InputStream
-	private InputStream getHttpConnection(String urlString) throws IOException {
-		InputStream stream = null;
-		URL url = new URL(urlString);
-		URLConnection connection = url.openConnection();
-
-		try {
-			HttpURLConnection httpConnection = (HttpURLConnection) connection;
-			httpConnection.setRequestMethod("GET");
-			httpConnection.connect();
-
-			if (httpConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				stream = httpConnection.getInputStream();
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return stream;
-	}
-
-	/**
-	 * 下载线程
-	 */
-
-	class DownloadPic extends AsyncTask<String, Integer, Bitmap> {
-
-		@Override
-		protected Bitmap doInBackground(String... params) {
-			Bitmap bitmap = null;
-			InputStream stream = null;
-			BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-			bmOptions.inSampleSize = 1;
-
-			try {
-				stream = getHttpConnection(params[0]);
-				bitmap = BitmapFactory.decodeStream(stream, null, bmOptions);
-				stream.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			return bitmap;
-		}
-
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-			super.onProgressUpdate(values);
-
-		}
-
-		@Override
-		protected void onPostExecute(Bitmap bitmap) {
-			Log.d(TAG, "get bitmap");
-			// YambaWidget.bitmap = bitmap;
-			// views = new RemoteViews(context.getPackageName(),
-			// R.layout.yamba_widget);
-		}
-	}
 }

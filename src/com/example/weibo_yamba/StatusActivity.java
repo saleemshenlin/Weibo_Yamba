@@ -25,6 +25,7 @@ import com.weibo.sdk.android.net.RequestListener;
 public class StatusActivity extends BaseActivity implements OnClickListener,
 		TextWatcher, OnSharedPreferenceChangeListener {
 	private static final String TAG = "StatusActivity";
+	private StatusesAPI api = null;
 
 	SharedPreferences prefs;
 	// private Handler handler = null;
@@ -53,6 +54,7 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
 		// 设置 prefs
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		prefs.registerOnSharedPreferenceChangeListener(this);
+		api = yambaApplication.getStatusesAPI(this);
 
 	}
 
@@ -60,8 +62,6 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
 	class PostToWeibo extends AsyncTask<String, Integer, String> {
 		@Override
 		protected String doInBackground(String... statuses) {
-			StatusesAPI api = null;
-			api = yambaApplication.getStatusesAPI();
 			api.update(statuses[0], lat, lon, new RequestListener() {
 
 				@Override
@@ -181,5 +181,6 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
 		// TODO Auto-generated method stub
 
 	}
+	
 
 }

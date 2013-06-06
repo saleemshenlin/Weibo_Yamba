@@ -16,6 +16,7 @@ import android.text.Spanned;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +100,12 @@ public class TimelineActivity extends BaseActivity {
 						.getColumnIndex(StatusData.C_SOURCE)));
 				((TextView) view).setText(textSource.toString());
 				return true;
+			} else if (view.getId() == R.id.yamba_icon) {
+				String userimgString = cursor.getString(cursor
+						.getColumnIndex(StatusData.C_USER_IMG));
+				AsyncImageLoader.setImageViewFromUrl(userimgString,
+						(ImageView) view);
+				return true;
 			} else {
 				return false;
 			}
@@ -116,4 +123,5 @@ public class TimelineActivity extends BaseActivity {
 			Log.d("TimelineReceiver", "onReceive");
 		}
 	}
+
 }

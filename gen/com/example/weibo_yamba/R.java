@@ -27,20 +27,20 @@ public final class R {
         public static final int timeline_bg1=0x7f020003;
     }
     public static final class id {
-        public static final int buttonUpdate=0x7f090006;
-        public static final int editText=0x7f090005;
+        public static final int buttonUpdate=0x7f090007;
+        public static final int editText=0x7f090006;
         public static final int itemPrefs=0x7f09000b;
         public static final int itemPurge=0x7f09000c;
         public static final int itemStatus=0x7f090009;
         public static final int itemTimeline=0x7f09000a;
         public static final int itemToggleService=0x7f09000d;
-        public static final int listTimeline=0x7f090007;
-        public static final int textCount=0x7f090004;
+        public static final int listTimeline=0x7f090008;
+        public static final int textCount=0x7f090005;
         public static final int textCreatedAt=0x7f090003;
         public static final int textSource=0x7f090002;
-        public static final int textText=0x7f090001;
-        public static final int textUser=0x7f090000;
-        public static final int yamba_icon=0x7f090008;
+        public static final int textText=0x7f090004;
+        public static final int textUser=0x7f090001;
+        public static final int yamba_icon=0x7f090000;
     }
     public static final class layout {
         public static final int row=0x7f030000;

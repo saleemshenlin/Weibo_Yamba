@@ -55,6 +55,9 @@ public class BaseActivity extends Activity {
 			startActivity(new Intent(this, StatusActivity.class)
 					.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			break;
+
+		case R.id.itemPurge:
+			
 		default:
 			break;
 		}

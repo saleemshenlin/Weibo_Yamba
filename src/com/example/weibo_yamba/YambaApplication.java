@@ -1,33 +1,24 @@
 package com.example.weibo_yamba;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Application;
-import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.widget.ImageView;
 
+import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.Weibo;
-import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.api.StatusesAPI;
-import com.weibo.sdk.android.api.WeiboAPI.FEATURE;
-import com.weibo.sdk.android.net.RequestListener;
 
 public class YambaApplication extends Application implements
 		OnSharedPreferenceChangeListener {
@@ -35,9 +26,11 @@ public class YambaApplication extends Application implements
 	private SharedPreferences prefs;
 	private static String CONSUMER_KEY = "1663244227";// 替换为开发者的appkey，例如"1646212860";
 	private static String REDIRECT_URL = "http://weibo.com/saleemshenlin";
+	public static Oauth2AccessToken accessToken;
 	private boolean serviceRunning;
 	private static int statesCount = 0;
 	StatusData tStatusData = new StatusData(this);
+	public static int DPI = 0;
 
 	Weibo mWeibo;
 
@@ -47,7 +40,10 @@ public class YambaApplication extends Application implements
 		super.onCreate();
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		this.prefs.registerOnSharedPreferenceChangeListener(this);
-		Log.e(TAG, "onCreate");
+		DisplayMetrics dpi = this.getApplicationContext().getResources()
+				.getDisplayMetrics();
+		DPI = dpi.densityDpi;
+		Log.e(TAG, "onCreate" + DPI);
 	}
 
 	@Override
@@ -83,86 +79,16 @@ public class YambaApplication extends Application implements
 		}
 	}
 
-	public StatusesAPI getStatusesAPI() {
-		StatusesAPI api = new StatusesAPI(SSO_Main.accessToken);
+	public StatusesAPI getStatusesAPI(Context context) {
+		Oauth2AccessToken accesstoken = AccessTokenKeeper
+				.readAccessToken(context);
+		StatusesAPI api = new StatusesAPI(accesstoken);
 		return api;
 	}
 
 	public StatusData getStatusData() {
 		StatusData tStatusData = new StatusData(this);
 		return tStatusData;
-	}
-
-	public synchronized int fetchStatusUpdates() {
-		Log.d(TAG, "Fetching status updates");
-		StatusesAPI api = this.getStatusesAPI();
-		api.friendsTimeline((long) 0, (long) 0, 20, 1, false, FEATURE.ALL,
-				false, new RequestListener() {
-
-					@Override
-					public void onIOException(IOException arg0) {
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					public void onError(WeiboException arg0) {
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					public void onComplete(String json) {
-						// TODO Auto-generated method stub
-						Log.d(TAG, "onComplete");
-						try {
-							YambaApplication.setStatesCount(0);
-							String latestStatusCreatedAtTime = tStatusData
-									.getLatestStatusCreatedAtTime();
-							JSONObject jsonObject = new JSONObject(json);
-							JSONArray statusesJSONArray = jsonObject
-									.getJSONArray("statuses");
-							ContentValues values = new ContentValues();
-							for (int i = 0; i < statusesJSONArray.length(); i++) {
-								values.clear();
-								JSONObject statusesItem = (JSONObject) statusesJSONArray
-										.opt(i);
-								JSONObject userItem = statusesItem
-										.getJSONObject("user");
-								String createAtDate = str2Date(statusesItem
-										.getString("created_at"));
-								values.put(StatusData.C_ID,
-										statusesItem.getInt("id"));
-								values.put(StatusData.C_SOURCE,
-										statusesItem.getString("source"));
-								values.put(StatusData.C_CREATED_AT,
-										str2Date(statusesItem
-												.getString("created_at")));
-								values.put(StatusData.C_USER,
-										userItem.getString("name"));
-								values.put(StatusData.C_TEXT,
-										statusesItem.getString("text"));
-								Log.d(TAG,
-										"Got update with id"
-												+ statusesItem.getInt("id")
-												+ ".Saving");
-								tStatusData.insertOrIgnore(values);
-								if (latestStatusCreatedAtTime != null) {
-									int result = latestStatusCreatedAtTime
-											.compareTo(createAtDate);
-									if (result < 0) {
-										YambaApplication
-												.setStatesCount(YambaApplication
-														.getStatesCount() + 1);
-									}
-								}
-							}
-							Log.d(TAG, "Fetched status updates");
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-		return YambaApplication.getStatesCount();
 	}
 
 	public static String str2Date(String str) {
@@ -251,5 +177,4 @@ public class YambaApplication extends Application implements
 		return bitmap;
 	}
 
-	
 }

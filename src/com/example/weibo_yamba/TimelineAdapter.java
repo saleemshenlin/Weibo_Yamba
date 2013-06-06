@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TimelineAdapter extends SimpleCursorAdapter {
@@ -42,8 +43,12 @@ public class TimelineAdapter extends SimpleCursorAdapter {
 		TextView textCreateAt = (TextView) row.findViewById(R.id.textCreatedAt);
 		TextView textSourceTextView = (TextView) row
 				.findViewById(R.id.textSource);
+		ImageView imageView = (ImageView) row.findViewById(R.id.yamba_icon);
 		textCreateAt.setText(DateUtils.getRelativeTimeSpanString(timestamp));
 		textSourceTextView.setText(textSource.toString());
+		String userimgString = cursor.getString(cursor
+				.getColumnIndex(StatusData.C_USER_IMG));
+		AsyncImageLoader.setImageViewFromUrl(userimgString, imageView);
 		// bindWiew
 	}
 }

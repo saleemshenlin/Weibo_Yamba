@@ -13,16 +13,60 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/textUser"
-            android:layout_width="fill_parent"
+        <ImageView
+            android:id="@+id/yamba_icon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="2dp"
-            android:text="用户名 "
-            android:textColor="#333"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_gravity="top|left"
+            android:adjustViewBounds="true"
+            android:clickable="true"
+            android:maxHeight="48dp"
+            android:maxWidth="48dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="2dp"
+            android:src="@drawable/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="用户名 "
+                android:textColor="#333"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/textSource"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    android:text="新浪微博"
+                    android:textColor="#333"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/textCreatedAt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:padding="2dp"
+                    android:text="10 minutes ago"
+                    android:textColor="#333"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -33,35 +77,14 @@
             android:id="@+id/textText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:paddingBottom="2dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="2dp"
             android:text="内容"
             android:textColor="#333"
             android:textSize="14sp" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textSource"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="2dp"
-            android:text="新浪微博"
-            android:textColor="#333"
-            android:textSize="10sp" />
-
-        <TextView
-            android:id="@+id/textCreatedAt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:padding="2dp"
-            android:text="10 minutes ago"
-            android:textColor="#333"
-            android:textSize="10sp" />
     </LinearLayout>
 
 </LinearLayout>

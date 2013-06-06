@@ -5,19 +5,7 @@
     android:layout_margin="4dp"
     android:background="#6fff"
     android:padding="4dp" >
-
-    <!--  -->
-
-    <ImageView
-        android:id="@+id/yamba_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|left"
-        android:clickable="true"
-        android:src="@drawable/ic_launcher" />
-
-    <!--  -->
-
+-
     <include layout="@layout/row" />
 
 </LinearLayout>
