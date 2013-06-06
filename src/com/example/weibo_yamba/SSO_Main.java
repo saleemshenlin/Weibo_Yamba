@@ -3,6 +3,7 @@ package com.example.weibo_yamba;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.weibo.sdk.android.Oauth2AccessToken;
@@ -36,8 +37,6 @@ public class SSO_Main extends Activity {
 			mSsoHandler = new SsoHandler(SSO_Main.this,
 					yambaApplication.getWeibo());
 			mSsoHandler.authorize(new AuthDialogListener());
-			Intent intent = new Intent(SSO_Main.this, TimelineActivity.class);
-			startActivity(intent);
 		}
 	}
 
@@ -52,6 +51,9 @@ public class SSO_Main extends Activity {
 				AccessTokenKeeper.keepAccessToken(SSO_Main.this, accessToken);
 				Toast.makeText(SSO_Main.this, "认证成功", Toast.LENGTH_SHORT)
 						.show();
+				Intent intent = new Intent(SSO_Main.this,
+						TimelineActivity.class);
+				startActivity(intent);
 			}
 		}
 
@@ -59,6 +61,7 @@ public class SSO_Main extends Activity {
 		public void onError(WeiboDialogError e) {
 			Toast.makeText(getApplicationContext(),
 					"Auth error : " + e.getMessage(), Toast.LENGTH_LONG).show();
+
 		}
 
 		@Override
@@ -72,6 +75,7 @@ public class SSO_Main extends Activity {
 			Toast.makeText(getApplicationContext(),
 					"Auth exception : " + e.getMessage(), Toast.LENGTH_LONG)
 					.show();
+			Log.e(TAG, e.toString());
 		}
 
 	}

@@ -20,6 +20,7 @@ public class StatusData {
 	static final String C_SOURCE = "source";
 	static final String C_TEXT = "txt";
 	static final String C_USER = "user";
+	static final String C_USER_IMG = "userimg";
 
 	private static final String GET_ALL_ORDER_BY = C_CREATED_AT + " DESC";
 
@@ -39,7 +40,7 @@ public class StatusData {
 			String sql = "create table " + TABLE + " (" + C_ID
 					+ " int primary key, " + C_SOURCE + " text, "
 					+ C_CREATED_AT + " datetime, " + C_USER + " text, "
-					+ C_TEXT + " text)";
+					+ C_USER_IMG + " text, " + C_TEXT + " text)";
 			db.execSQL(sql);
 		}
 
@@ -55,6 +56,10 @@ public class StatusData {
 	public StatusData(Context context) {
 		this.dbHelper = new DbHelper(context);
 		Log.i(TAG, "Initialize data");
+	}
+
+	public DbHelper getDbHelper() {
+		return this.dbHelper;
 	}
 
 	public void close() {
@@ -91,7 +96,8 @@ public class StatusData {
 			Cursor cursor = db.query(TABLE, MAX_CREATED_AT_COLUMNS, null, null,
 					null, null, null);
 			try {
-				return cursor.moveToNext() ? cursor.getString(0) : "Long.MIN_VALUE";
+				return cursor.moveToNext() ? cursor.getString(0)
+						: "Long.MIN_VALUE";
 			} finally {
 				cursor.close();
 			}

@@ -8,10 +8,28 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
 
+    <permission
+        android:name="com.example.weibo_yamba.SEND_TIMELINE_NOTIFICATIONS"
+        android:description="@string/send_timeline_notifications_permission_description"
+        android:label="@string/send_timeline_notifications_permission_label"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="normal" >
+    </permission>
+    <permission
+        android:name="com.example.weibo_yamba.RECEIVE_TIMELINE_NOTIFICATIONS"
+        android:description="@string/receive_timeline_notifications_permission_description"
+        android:label="@string/receive_timeline_notifications_permission_label"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="normal" >
+    </permission>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.example.weibo_yamba.RECEIVE_TIMELINE_NOTIFICATIONS" />
+    <uses-permission android:name="com.example.weibo_yamba.SEND_TIMELINE_NOTIFICATIONS" />
 
     <application
         android:name="com.example.weibo_yamba.YambaApplication"
@@ -20,6 +38,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.NoActionBar" >
+        <provider
+            android:name="com.example.weibo_yamba.StatusProvider"
+            android:authorities="com.example.weibo_yamba.statusprovider" />
+
         <activity
             android:name="com.example.weibo_yamba.SSO_Main"
             android:label="@string/app_name" >
@@ -40,6 +62,33 @@
 
         <service android:name="com.example.weibo_yamba.UpdaterService" >
         </service>
+        <!--
+        开机开启服务
+        <receiver android:name="com.example.weibo_yamba.BootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        -->
+        <receiver android:name="com.example.weibo_yamba.NetworkReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.ACTION_BACKGROUND_DATA_SETTING_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.example.weibo_yamba.YambaWidget"
+            android:label="@string/msgLastTimelineUpdate" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.example.weibo_yamba.NEW_STATUS" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/yamba_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

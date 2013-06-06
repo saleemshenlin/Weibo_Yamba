@@ -1,27 +1,37 @@
 package com.example.weibo_yamba;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TimelineActivity extends BaseActivity {
-	DbHelper dbHelper;
 	SQLiteDatabase db;
 	Cursor cursor;
 	ListView listTimeline;
 	SimpleCursorAdapter adapter;
-	static final String[] FROM = { DbHelper.C_CREATED_AT, DbHelper.C_USER,
-			DbHelper.C_TEXT };
-	static final int[] TO = { R.id.textCreatedAt, R.id.textUser, R.id.textText };
+	TimelineReceiver receiver;
+	IntentFilter filter;
+	static final String SEND_TIMELINE_NOTIFICATIONS = "com.example.weibo_yamba.SEND_TIMELINE_NOTIFICATIONS";
+	static final String[] FROM = { StatusData.C_CREATED_AT, StatusData.C_USER,
+			StatusData.C_TEXT, StatusData.C_SOURCE };
+	static final int[] TO = { R.id.textCreatedAt, R.id.textUser, R.id.textText,
+			R.id.textSource };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +40,7 @@ public class TimelineActivity extends BaseActivity {
 		setContentView(R.layout.timeline);
 		// get textView
 		listTimeline = (ListView) findViewById(R.id.listTimeline);
+		filter = new IntentFilter("com.example.weibo_yamba.NEW_STATUS");
 	}
 
 	@Override
@@ -45,9 +56,21 @@ public class TimelineActivity extends BaseActivity {
 		super.onResume();
 		cursor = yambaApplication.getStatusData().getStatusUpdates();
 		startManagingCursor(cursor);
-		adapter = new SimpleCursorAdapter(this, R.layout.row, cursor, FROM, TO);
-		adapter.setViewBinder(VIEW_BINDER);
+		receiver = new TimelineReceiver();
+		adapter = new TimelineAdapter(this, cursor);
 		listTimeline.setAdapter(adapter);
+		registerReceiver(receiver, filter, SEND_TIMELINE_NOTIFICATIONS, null);
+		Toast.makeText(TimelineActivity.this,
+				"更新了" + YambaApplication.getStatesCount() + "条微博！",
+				Toast.LENGTH_SHORT).show();
+		YambaApplication.setStatesCount(0);
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		unregisterReceiver(receiver);
 	}
 
 	static final ViewBinder VIEW_BINDER = new ViewBinder() {
@@ -55,29 +78,42 @@ public class TimelineActivity extends BaseActivity {
 		@Override
 		public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
 			// TODO Auto-generated method stub
-			if (view.getId() != R.id.textCreatedAt)
+			if (view.getId() == R.id.textCreatedAt) {
+
+				long timestamp = 0;
+				long now = System.currentTimeMillis();
+				try {
+					timestamp = YambaApplication.str2Date2long(cursor
+							.getString(columnIndex));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				CharSequence reltime = DateUtils.getRelativeTimeSpanString(
+						timestamp, now, DateUtils.SECOND_IN_MILLIS,
+						DateUtils.FORMAT_ABBREV_ALL);
+				((TextView) view).setText(reltime);
+				return true;
+			} else if (view.getId() == R.id.textSource) {
+				Spanned textSource = Html.fromHtml(cursor.getString(cursor
+						.getColumnIndex(StatusData.C_SOURCE)));
+				((TextView) view).setText(textSource.toString());
+				return true;
+			} else {
 				return false;
-			long timestamp = 0;
-			long now = System.currentTimeMillis();
-			try {
-				timestamp = str2Date2long(cursor.getString(columnIndex));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-			CharSequence reltime = DateUtils.getRelativeTimeSpanString(
-					timestamp, now, DateUtils.SECOND_IN_MILLIS,
-					DateUtils.FORMAT_ABBREV_ALL);
-			((TextView) view).setText(reltime);
-			return true;
 		}
 
 	};
 
-	public static long str2Date2long(String dateString) throws ParseException {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss");
-		long dateLong = simpleDateFormat.parse(dateString).getTime();
-		return dateLong;
+	class TimelineReceiver extends BroadcastReceiver {
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			cursor.requery();
+			adapter.notifyDataSetChanged();
+			Log.d("TimelineReceiver", "onReceive");
+		}
 	}
 }

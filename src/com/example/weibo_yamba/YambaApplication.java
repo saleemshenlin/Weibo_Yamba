@@ -1,6 +1,12 @@
 package com.example.weibo_yamba;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,8 +16,12 @@ import android.app.Application;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.weibo.sdk.android.Weibo;
 import com.weibo.sdk.android.WeiboException;
@@ -26,7 +36,8 @@ public class YambaApplication extends Application implements
 	private static String CONSUMER_KEY = "1663244227";// 替换为开发者的appkey，例如"1646212860";
 	private static String REDIRECT_URL = "http://weibo.com/saleemshenlin";
 	private boolean serviceRunning;
-	public int statesCount = 0;
+	private static int statesCount = 0;
+	StatusData tStatusData = new StatusData(this);
 
 	Weibo mWeibo;
 
@@ -82,73 +93,79 @@ public class YambaApplication extends Application implements
 		return tStatusData;
 	}
 
-	public synchronized void fetchStatusUpdates() {
+	public synchronized int fetchStatusUpdates() {
 		Log.d(TAG, "Fetching status updates");
 		StatusesAPI api = this.getStatusesAPI();
-		try {
-			api.friendsTimeline((long) 0, (long) 0, 20, 1, false, FEATURE.ALL,
-					false, new RequestListener() {
+		api.friendsTimeline((long) 0, (long) 0, 20, 1, false, FEATURE.ALL,
+				false, new RequestListener() {
 
-						@Override
-						public void onIOException(IOException arg0) {
-							// TODO Auto-generated method stub
-						}
+					@Override
+					public void onIOException(IOException arg0) {
+						// TODO Auto-generated method stub
+					}
 
-						@Override
-						public void onError(WeiboException arg0) {
-							// TODO Auto-generated method stub
-						}
+					@Override
+					public void onError(WeiboException arg0) {
+						// TODO Auto-generated method stub
+					}
 
-						@Override
-						public void onComplete(String arg0) {
-							// TODO Auto-generated method stub
-							Log.d(TAG, "onComplete");
-							try {
-								json2DB(arg0);
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+					@Override
+					public void onComplete(String json) {
+						// TODO Auto-generated method stub
+						Log.d(TAG, "onComplete");
+						try {
+							YambaApplication.setStatesCount(0);
+							String latestStatusCreatedAtTime = tStatusData
+									.getLatestStatusCreatedAtTime();
+							JSONObject jsonObject = new JSONObject(json);
+							JSONArray statusesJSONArray = jsonObject
+									.getJSONArray("statuses");
+							ContentValues values = new ContentValues();
+							for (int i = 0; i < statusesJSONArray.length(); i++) {
+								values.clear();
+								JSONObject statusesItem = (JSONObject) statusesJSONArray
+										.opt(i);
+								JSONObject userItem = statusesItem
+										.getJSONObject("user");
+								String createAtDate = str2Date(statusesItem
+										.getString("created_at"));
+								values.put(StatusData.C_ID,
+										statusesItem.getInt("id"));
+								values.put(StatusData.C_SOURCE,
+										statusesItem.getString("source"));
+								values.put(StatusData.C_CREATED_AT,
+										str2Date(statusesItem
+												.getString("created_at")));
+								values.put(StatusData.C_USER,
+										userItem.getString("name"));
+								values.put(StatusData.C_TEXT,
+										statusesItem.getString("text"));
+								Log.d(TAG,
+										"Got update with id"
+												+ statusesItem.getInt("id")
+												+ ".Saving");
+								tStatusData.insertOrIgnore(values);
+								if (latestStatusCreatedAtTime != null) {
+									int result = latestStatusCreatedAtTime
+											.compareTo(createAtDate);
+									if (result < 0) {
+										YambaApplication
+												.setStatesCount(YambaApplication
+														.getStatesCount() + 1);
+									}
+								}
 							}
+							Log.d(TAG, "Fetched status updates");
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-					});
-
-		} catch (RuntimeException e) {
-			Log.e(TAG, "failed to fetc status updates", e);
-		}
+					}
+				});
+		return YambaApplication.getStatesCount();
 	}
 
-	public void json2DB(String json) throws JSONException {
-		int count = 0;
-		StatusData tStatusData = new StatusData(this);
-		String latestStatusCreatedAtTime = tStatusData
-				.getLatestStatusCreatedAtTime();
-		JSONObject jsonObject = new JSONObject(json);
-		JSONArray statusesJSONArray = jsonObject.getJSONArray("statuses");
-		ContentValues values = new ContentValues();
-		for (int i = 0; i < statusesJSONArray.length(); i++) {
-			values.clear();
-			JSONObject statusesItem = (JSONObject) statusesJSONArray.opt(i);
-			JSONObject userItem = statusesItem.getJSONObject("user");
-			String createAtDate = str2Date(statusesItem.getString("created_at"));
-			values.put(StatusData.C_ID, statusesItem.getInt("id"));
-			values.put(StatusData.C_SOURCE, statusesItem.getString("source"));
-			values.put(StatusData.C_CREATED_AT,
-					str2Date(statusesItem.getString("created_at")));
-			values.put(StatusData.C_USER, userItem.getString("name"));
-			values.put(StatusData.C_TEXT, statusesItem.getString("text"));
-			Log.d(TAG, "Got update with id" + statusesItem.getInt("id")
-					+ ".Saving");
-			tStatusData.insertOrIgnore(values);
-			int result = latestStatusCreatedAtTime.compareTo(createAtDate);
-			if (result < 0) {
-				count++;
-			}
-		}
-		this.statesCount = count;
-		Log.d(TAG, "Update: " + count + " messages!");
-	}
-
-	public String str2Date(String str) {
+	public static String str2Date(String str) {
 		String date = null;
 		String dateArr[] = str.split(" ");
 		switch (monthEnum.toMonth(dateArr[1])) {
@@ -197,6 +214,21 @@ public class YambaApplication extends Application implements
 		return date;
 	}
 
+	public static long str2Date2long(String dateString) throws ParseException {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+		long dateLong = simpleDateFormat.parse(dateString).getTime();
+		return dateLong;
+	}
+
+	public static int getStatesCount() {
+		return statesCount;
+	}
+
+	public static void setStatesCount(int statesCount) {
+		YambaApplication.statesCount = statesCount;
+	}
+
 	public enum monthEnum {
 		Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec;
 		public static monthEnum toMonth(String str) {
@@ -208,4 +240,16 @@ public class YambaApplication extends Application implements
 		}
 	}
 
+	public static Bitmap getImageBitmap(String url) {
+		Bitmap bitmap = null;
+		try {
+			bitmap = BitmapFactory.decodeStream((InputStream) new URL(url)
+					.getContent());
+		} catch (IOException e) {
+			Log.e(TAG, "Error getting bitmap", e);
+		}
+		return bitmap;
+	}
+
+	
 }

@@ -1,20 +1,22 @@
 package com.example.weibo_yamba;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
 public class TimelineAdapter extends SimpleCursorAdapter {
 
-	static final String[] FROM = { DbHelper.C_CREATED_AT, DbHelper.C_USER,
-			DbHelper.C_TEXT };
-	static final int[] TO = { R.id.textCreatedAt, R.id.textUser, R.id.textText };
+	static final String[] FROM = { StatusData.C_CREATED_AT, StatusData.C_USER,
+			StatusData.C_TEXT, StatusData.C_SOURCE };
+	static final int[] TO = { R.id.textCreatedAt, R.id.textUser, R.id.textText,
+			R.id.textSource };
 
 	public TimelineAdapter(Context context, Cursor cursor) {
 		// TODO Auto-generated constructor stub
@@ -26,24 +28,22 @@ public class TimelineAdapter extends SimpleCursorAdapter {
 		// TODO Auto-generated method stub
 		super.bindView(row, context, cursor);
 		long timestamp = 0;
+		Spanned textSource = Html.fromHtml("Sina Weibo");
 		try {
-			timestamp = str2Date2long(cursor.getString(cursor
-					.getColumnIndex(DbHelper.C_CREATED_AT)));
+			timestamp = YambaApplication.str2Date2long(cursor.getString(cursor
+					.getColumnIndex(StatusData.C_CREATED_AT)));
+			textSource = Html.fromHtml(cursor.getString(cursor
+					.getColumnIndex(StatusData.C_SOURCE)));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		TextView textCreateAt = (TextView) row.findViewById(R.id.textCreatedAt);
+		TextView textSourceTextView = (TextView) row
+				.findViewById(R.id.textSource);
 		textCreateAt.setText(DateUtils.getRelativeTimeSpanString(timestamp));
+		textSourceTextView.setText(textSource.toString());
 		// bindWiew
 	}
-
-	public static long str2Date2long(String dateString) throws ParseException {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss");
-		long dateLong = simpleDateFormat.parse(dateString).getTime();
-		return dateLong;
-	}
-
 }
