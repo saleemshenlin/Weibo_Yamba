@@ -1,5 +1,6 @@
 package com.example.weibo_yamba;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -8,10 +9,12 @@ import java.text.SimpleDateFormat;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,6 +34,7 @@ public class YambaApplication extends Application implements
 	private static int statesCount = 0;
 	StatusData tStatusData = new StatusData(this);
 	public static int DPI = 0;
+	public static File imgCache;
 
 	Weibo mWeibo;
 
@@ -44,6 +48,15 @@ public class YambaApplication extends Application implements
 				.getDisplayMetrics();
 		DPI = dpi.densityDpi;
 		Log.e(TAG, "onCreate" + DPI);
+		if (!this.isServiceRunning()) {
+			startService(new Intent(this, UpdaterService.class));
+			this.setServiceRunning();
+		}
+		imgCache = new File(Environment.getExternalStorageDirectory(),
+				"Weibo_Yamba/cache");
+		if (!imgCache.exists()) {
+			imgCache.mkdirs();
+		}
 	}
 
 	@Override
@@ -175,6 +188,14 @@ public class YambaApplication extends Application implements
 			Log.e(TAG, "Error getting bitmap", e);
 		}
 		return bitmap;
+	}
+
+	public static void ClearImgCache() {
+		File[] files = imgCache.listFiles();
+		for (File file : files) {
+			file.delete();
+		}
+		imgCache.delete();
 	}
 
 }

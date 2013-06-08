@@ -1,6 +1,9 @@
 package com.example.weibo_yamba;
 
+import java.io.File;
 import java.text.ParseException;
+
+import com.example.weibo_yamba.AsyncImageLoader.MD5;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -9,6 +12,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -67,6 +71,9 @@ public class YambaWidget extends AppWidgetProvider {
 						cursor.getString(cursor
 								.getColumnIndex(StatusData.C_SOURCE)))
 						.toString();
+				String userimgString = cursor.getString(
+						cursor.getColumnIndex(StatusData.C_USER_IMG))
+						.toString();
 				for (int appWidgetId : appWidgetIds) {
 					Log.d(TAG, "Updating widget " + appWidgetId);
 					views = new RemoteViews(context.getPackageName(),
@@ -79,6 +86,7 @@ public class YambaWidget extends AppWidgetProvider {
 							PendingIntent.getActivity(context, 0, new Intent(
 									context, TimelineActivity.class), 0));
 					appWidgetManager.updateAppWidget(appWidgetId, views);
+					getImageURI(userimgString, YambaApplication.imgCache, views);
 				}
 			} else {
 				Log.d(TAG, "No data to update");
@@ -88,4 +96,12 @@ public class YambaWidget extends AppWidgetProvider {
 		}
 	}
 
+	public void getImageURI(String path, File cache, RemoteViews views) {
+		String name = MD5.getMD5(path) + ".jpg";
+		File file = new File(cache, name);
+		// 如果图片存在本地缓存目录，则不去服务器下载
+		if (file.exists()) {
+			views.setImageViewUri(R.id.yamba_icon, Uri.fromFile(file));// Uri.fromFile(path)这个方法能得到文件的URI
+		}
+	}
 }

@@ -21,7 +21,7 @@
     <string name="titleStartService">开启服务</string>
     <string name="titleStopService">关闭服务</string>
     <string name="titleTimeline">看看大家有什么新鲜事</string>
-    <string name="titlePurge">清洗</string>
+    <string name="titlePurge">清空缓存</string>
     <string name="send_timeline_notifications_permission_description">发送通知权限描述</string>
     <string name="send_timeline_notifications_permission_label">发送通知权限</string>
     <string name="receive_timeline_notifications_permission_description">接收通知权限描述</string>

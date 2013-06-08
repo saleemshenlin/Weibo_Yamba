@@ -2,6 +2,9 @@ package com.example.weibo_yamba;
 
 import java.io.IOException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.graphics.Color;
@@ -20,6 +23,8 @@ import android.widget.Toast;
 
 import com.weibo.sdk.android.WeiboException;
 import com.weibo.sdk.android.api.StatusesAPI;
+import com.weibo.sdk.android.api.WeiboAPI.EMOTION_TYPE;
+import com.weibo.sdk.android.api.WeiboAPI.LANGUAGE;
 import com.weibo.sdk.android.net.RequestListener;
 
 public class StatusActivity extends BaseActivity implements OnClickListener,
@@ -62,22 +67,48 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
 	class PostToWeibo extends AsyncTask<String, Integer, String> {
 		@Override
 		protected String doInBackground(String... statuses) {
-			api.update(statuses[0], lat, lon, new RequestListener() {
+			// api.update(statuses[0], lat, lon, new RequestListener() {
+			//
+			// @Override
+			// public void onIOException(IOException arg0) {
+			// // editText.setText(arg0.toString());
+			// }
+			//
+			// @Override
+			// public void onError(WeiboException arg0) {
+			// // editText.setText(arg0.toString());
+			// }
+			//
+			// @Override
+			// public void onComplete(String arg0) {
+			// }
+			// });
+			api.emotions(EMOTION_TYPE.FACE, LANGUAGE.cnname,
+					new RequestListener() {
 
-				@Override
-				public void onIOException(IOException arg0) {
-					// editText.setText(arg0.toString());
-				}
+						@Override
+						public void onIOException(IOException arg0) {
+							// TODO Auto-generated method stub
 
-				@Override
-				public void onError(WeiboException arg0) {
-					// editText.setText(arg0.toString());
-				}
+						}
 
-				@Override
-				public void onComplete(String arg0) {
-				}
-			});
+						@Override
+						public void onError(WeiboException arg0) {
+							// TODO Auto-generated method stub
+
+						}
+
+						@Override
+						public void onComplete(String json) {
+							// TODO Auto-generated method stub
+							try {
+								JSONObject jsonObject = new JSONObject(json);
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					});
 			return statuses[0];
 		}
 
@@ -181,6 +212,5 @@ public class StatusActivity extends BaseActivity implements OnClickListener,
 		// TODO Auto-generated method stub
 
 	}
-	
 
 }

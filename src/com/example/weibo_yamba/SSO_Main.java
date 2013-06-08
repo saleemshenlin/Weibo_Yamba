@@ -25,6 +25,7 @@ public class SSO_Main extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
 		SSO_Main.accessToken = AccessTokenKeeper.readAccessToken(this);
 		YambaApplication yambaApplication = ((YambaApplication) getApplication());
 		if (SSO_Main.accessToken.isSessionValid()) {

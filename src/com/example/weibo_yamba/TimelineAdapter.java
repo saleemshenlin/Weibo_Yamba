@@ -2,6 +2,8 @@ package com.example.weibo_yamba;
 
 import java.text.ParseException;
 
+import com.example.weibo_yamba.AsyncImageLoader.AsyncGetImg;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -48,7 +50,16 @@ public class TimelineAdapter extends SimpleCursorAdapter {
 		textSourceTextView.setText(textSource.toString());
 		String userimgString = cursor.getString(cursor
 				.getColumnIndex(StatusData.C_USER_IMG));
-		AsyncImageLoader.setImageViewFromUrl(userimgString, imageView);
+		// AsyncImageLoader.setImageViewFromUrl(userimgString, imageView);
 		// bindWiew
+		asyncloadImage(imageView, userimgString);
 	}
+
+	private void asyncloadImage(ImageView iv_header, String path) {
+		AsyncImageLoader asyncImageLoader = new AsyncImageLoader();
+		AsyncGetImg task = asyncImageLoader.new AsyncGetImg(iv_header);
+		task.execute(path);
+
+	}
+
 }

@@ -20,9 +20,11 @@
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/titlePurge">
     </item>
+    <!--
     <item
         android:id="@+id/itemToggleService"
         android:title="@string/titleStartService">
-    </item>
+    </item>
+    -->
 
 </menu>

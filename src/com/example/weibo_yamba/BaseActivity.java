@@ -37,15 +37,15 @@ public class BaseActivity extends Activity {
 			startActivity(new Intent(this, PrefsActivity.class)
 					.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			break;
-		case R.id.itemToggleService:
-			if (yambaApplication.isServiceRunning()) {
-				stopService(new Intent(this, UpdaterService.class));
-				yambaApplication.setServiceRunning();
-			} else {
-				startService(new Intent(this, UpdaterService.class));
-				yambaApplication.setServiceRunning();
-			}
-			break;
+		// case R.id.itemToggleService:
+		// if (yambaApplication.isServiceRunning()) {
+		// stopService(new Intent(this, UpdaterService.class));
+		// yambaApplication.setServiceRunning();
+		// } else {
+		// startService(new Intent(this, UpdaterService.class));
+		// yambaApplication.setServiceRunning();
+		// }
+		// break;
 		case R.id.itemTimeline:
 			startActivity(new Intent(this, TimelineActivity.class).addFlags(
 					Intent.FLAG_ACTIVITY_SINGLE_TOP).addFlags(
@@ -57,7 +57,7 @@ public class BaseActivity extends Activity {
 			break;
 
 		case R.id.itemPurge:
-			
+			YambaApplication.ClearImgCache();
 		default:
 			break;
 		}
@@ -67,12 +67,12 @@ public class BaseActivity extends Activity {
 	// Called every time menu is opened
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) { //
-		MenuItem toggleItem = menu.findItem(R.id.itemToggleService); //
-		if (yambaApplication.isServiceRunning()) { //
-			toggleItem.setTitle(R.string.titleStopService);
-		} else { //
-			toggleItem.setTitle(R.string.titleStartService);
-		}
+		// MenuItem toggleItem = menu.findItem(R.id.itemToggleService); //
+		// if (yambaApplication.isServiceRunning()) { //
+		// toggleItem.setTitle(R.string.titleStopService);
+		// } else { //
+		// toggleItem.setTitle(R.string.titleStartService);
+		// }
 		return true;
 	}
 }

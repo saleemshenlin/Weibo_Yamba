@@ -50,7 +50,9 @@ public class UpdaterService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		this.runFlag = true;
-		this.updater.start();
+		if (!this.updater.isAlive()) {
+			this.updater.start();
+		}
 
 		Log.e(TAG, "onStart");
 		return START_STICKY;
